@@ -1,0 +1,9 @@
+[submodule "3rd/cktext"]
+	path = 3rd/cktext
+	url = https://github.com/ChenKe404/cktext.git
+[submodule "3rd/ckfont"]
+	path = 3rd/ckfont
+	url = https://github.com/ChenKe404/ckfont.git
+[submodule "3rd/TSpp"]
+	path = 3rd/TSpp
+	url = https://github.com/ChenKe404/TSpp.git

@@ -1,0 +1,6 @@
+.vs
+*.aps
+*.user
+*/Debug
+*/Release
+*/x64
