@@ -6,7 +6,7 @@ using namespace mINI;
 
 void sun() {}
 
-// 标准化字符串中的换行符为unix标准
+// 鏍囧噯鍖栧瓧绗︿覆涓殑鎹㈣绗︿负unix鏍囧噯
 void unix_line_feed(char* str)
 {
     const auto len = strlen(str);
@@ -35,7 +35,7 @@ inline int multi2wide(const char* multi, std::wstring& wide, UINT CP)
     if (sz < 1) return 0;
     wide.resize(sz);
     auto ret = MultiByteToWideChar(CP, 0, multi, -1, wide.data(), sz);
-    if (ret > 0) wide.resize(sz - 1);   // 输出不包括nul结尾
+    if (ret > 0) wide.resize(sz - 1);   // 杈撳嚭涓嶅寘鎷琻ul缁撳熬
     return ret;
 }
 
@@ -45,7 +45,7 @@ inline int wide2multi(const wchar_t* wide, std::string& multi, UINT CP)
     if (sz < 1) return 0;
     multi.resize(sz);
     auto ret = WideCharToMultiByte(CP, 0, wide, -1, multi.data(), sz, 0, 0);
-    if (ret > 0) multi.resize(sz - 1);   // 输出不包括nul结尾
+    if (ret > 0) multi.resize(sz - 1);   // 杈撳嚭涓嶅寘鎷琻ul缁撳熬
     return ret;
 }
 

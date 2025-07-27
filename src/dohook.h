@@ -4,9 +4,9 @@
 #include <textprint.h>
 #include "re_restatemission.h"
 
-// ÖØĞÂÊµÏÖµÄFetch_String
-// @uID  ×ÊÔ´ID
-// @return utf8±àÂëµÄÒëÎÄ»òÔ­ÎÄ(Èç¹ûÒëÎÄ²»´æÔÚ)
+// é‡æ–°å®ç°çš„Fetch_String
+// @uID  èµ„æºID
+// @return utf8ç¼–ç çš„è¯‘æ–‡æˆ–åŸæ–‡(å¦‚æœè¯‘æ–‡ä¸å­˜åœ¨)
 const char* Re_Fetch_String(UINT uID);
 extern ck::Hook <
     0x00472350,

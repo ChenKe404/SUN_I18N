@@ -29,10 +29,10 @@ public:
 	~SubtitleDrawer();
 	void load(const std::string& file);
 
-	// ÉèÖÃË®Æ½¶ÔÆë
+	// è®¾ç½®æ°´å¹³å¯¹é½
 	void setAlignH(int align_h);
 	void setSurface(DSurface* sur);
-	// ÉèÖÃµçÓ°µÄ¾ØĞÎÇøÓò
+	// è®¾ç½®ç”µå½±çš„çŸ©å½¢åŒºåŸŸ
 	void setMovieRect(const Rect&);
 
 	void draw(double progress);

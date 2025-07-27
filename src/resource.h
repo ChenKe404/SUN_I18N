@@ -55,7 +55,7 @@ inline std::u32string to_u32local(const char* anstr)
     if (!anstr) return ret;
     auto str = g_text.u32(anstr);
     if (str) ret = str;
-    else ck::Text::u8to32(anstr, ret);   // Ã»ÓĞÒëÎÄÔòÖ±½ÓÊ¹ÓÃÔ­ÎÄ
+    else ck::Text::u8to32(anstr, ret);   // æ²¡æœ‰è¯‘æ–‡åˆ™ç›´æ¥ä½¿ç”¨åŸæ–‡
     return ret;
 }
 

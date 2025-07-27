@@ -30,13 +30,13 @@ public:
 	int maxCharWidth() const;
 	int charWidth(char32_t) const;
 
-	// 设置绘制选项
-	// @return 当前选项
+	// 璁剧疆缁樺埗閫夐」
+	// @return 褰撳墠閫夐」
 	Options& options();
 
 	const Char& c(char32_t) const;
 
-	// 获得字符串的字符指针数组
+	// 鑾峰緱瀛楃涓茬殑瀛楃鎸囬拡鏁扮粍
 	CharPtrs cs(const char32_t* u32str) const;
 
 	inline CharPtrs cs(const std::u32string& u32str) const

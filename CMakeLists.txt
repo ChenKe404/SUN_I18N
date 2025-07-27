@@ -37,8 +37,8 @@ target_precompile_headers(DLL PRIVATE src/pch.h)
 set_target_properties(DLL PROPERTIES OUTPUT_NAME "SUN")
 target_compile_definitions(DLL PRIVATE
     -DWIN32
-    -D_DEBUG
     -D_WINDOWS
     -D_UNICODE
     -DUNICODE
+    $<$<CONFIG:Debug>:-D_DEBUG>
 )
