@@ -3,6 +3,7 @@
 #include <fstream>
 #include <fenv.h>
 #include "resource.h"
+#include <tibsun_globals.h>
 
 static void trim(std::string& str)
 {
@@ -126,6 +127,20 @@ void SubtitleDrawer::setSurface(DSurface* sur)
 void SubtitleDrawer::setMovieRect(const Rect& rc)
 {
 	_rc = rc;
+	RECT crc;
+	GetClientRect(MainWindow, &crc);
+	auto w = crc.right - crc.left;
+	auto h = crc.bottom - crc.top;
+	if (rc.Width > w)
+	{
+		_rc.X = 0;
+		_rc.Width = w;
+	}
+	if (rc.Height > h)
+	{
+		_rc.Y = 0;
+		_rc.Height = h;
+	}
 }
 
 void SubtitleDrawer::draw(double progress)
