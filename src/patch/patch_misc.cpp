@@ -9,22 +9,23 @@ HWND g_MainWnd;
 
 struct resol
 {
-    int width, height;
-    inline bool operator<(const resol& o) const
-    {
-        if (width < o.width)
-            return true;
-        if (width > o.width)
-            return false;
-        if (height < o.height)
-            return true;
-        return false;
-    }
+	int width, height;
+	inline bool operator<(const resol& o) const
+	{
+		if (width < o.width)
+			return true;
+		if (width > o.width)
+			return false;
+		if (height < o.height)
+			return true;
+		return false;
+	}
 };
-static std::vector<int> g_resolution;
-static const int* enum_resolution()
+
+static const int* __fastcall enum_resolution(int, int, int, int, int)
 {
-	g_resolution.clear();
+	g_HighResolution = true;
+
 	// 获取主显示器设备名称
 	DISPLAY_DEVICE displayDevice = { sizeof(DISPLAY_DEVICE) };
 	DWORD idx = 0;
@@ -38,7 +39,8 @@ static const int* enum_resolution()
 		idx++;
 	}
 
-	if(primaryDevice)
+	std::vector<int> resolution;
+	if (primaryDevice)
 	{
 		// 枚举所有显示模式
 		DEVMODE devMode = {};
@@ -55,53 +57,34 @@ static const int* enum_resolution()
 			resols.insert({ (int)devMode.dmPelsWidth, (int)devMode.dmPelsHeight });
 		}
 
-		g_resolution.reserve(resols.size()+1);
+		resolution.reserve(resols.size() + 1);
 		for (auto& it : resols)
 		{
-			g_resolution.push_back(it.width);
-			g_resolution.push_back(it.height);
+			resolution.push_back(it.width);
+			resolution.push_back(it.height);
 		}
-		g_resolution.push_back(0);
-		g_resolution.push_back(0);
+		resolution.push_back(0);
+		resolution.push_back(0);
 	}
-	if (g_resolution.empty())
+	if (resolution.empty())
 	{
-		g_resolution = {
+		resolution = {
 			640,480,
 			800,600,
 			0,0
 		};
 	}
 
-	// 按分辨率排序
-	return g_resolution.data();
+	static auto _nh_malloc = (int(__cdecl*)(size_t, int))0x006B72DE;
+	const auto count = resolution.size() * sizeof(int);
+	auto mem = (int*)_nh_malloc(count, 1);
+	memcpy(mem, resolution.data(), count);
+	return mem;
 }
-
-__declspec(noinline) __declspec(naked)
-void patch_resolution()
-{
-	__asm {
-        mov eax, 0x007E4745
-		mov [eax],1
-		call enum_resolution
-		mov ecx, 0x0050B527
-		jmp ecx
-	}
-}
-
-static void __fastcall patch_unit_select1(
-	Surface* pSur, ConvertClass* a2,
-	int16_t* a3, unsigned int a4,
-	Point2D* xy, const Rect* a6,
-	int a7, int a8, int a9, int a10,
-	int a11, int a12, unsigned int a13,
-	Point2D* a14, int a15
-)
-{}
 
 static void* __fastcall patch_unit_select(const char* fileName)
 {
-	static const auto Fx = (void*(*)(const char*))0x00559DE0;
+	static const auto Fx = (void* (*)(const char*))0x00559DE0;
 	auto hrc = FindResourceA(hInstance, MAKEINTRESOURCEA(IDR_SHP_UNIT_SELECT), "SHP");
 	if (!hrc) return Fx(fileName);
 	auto hg = LoadResource(hInstance, hrc);
@@ -116,7 +99,7 @@ static void* __fastcall patch_unit_select(const char* fileName)
 
 void init_patch_misc()
 {
-	write_cmd(0x0050B4F7, patch_resolution, OP_JMP);
+	write_cmd(0x0050B522, enum_resolution, OP_CALL);
 	if (g_setting.hide_unit_select)
 		write_cmd(0x00587AE5, patch_unit_select, OP_CALL);
 }

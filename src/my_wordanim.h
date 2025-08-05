@@ -27,7 +27,7 @@ private:
     const MyFont::CharPtrs* pChrs;
     const MyFont::Lines* pLines;
     
-    int nLine;           // å½“å‰è¡Œ
+    int nLine;           // µ±Ç°ĞĞ
     Rect mRectBound;
 };
 

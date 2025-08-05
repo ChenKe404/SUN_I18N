@@ -15,6 +15,7 @@ ARRAY_DEC(int, g_pAudText1B, 5);
 
 extern bool& g_bSlotText;
 extern bool& g_bWindowed;
+extern bool& g_HighResolution;
 extern char& g_Delimiter;
 extern int& g_WndWidth;
 extern int& g_WndHeight;
@@ -33,5 +34,6 @@ extern DSurface*& g_SurComposite;	// 复合表面
 extern DSurface*& g_SurTile;		// 地块表面
 
 extern PaletteClass& g_PalOriginal;
+extern ColorScheme**& g_ArrCS;
 
 #endif // !TSPP_EX_GLOBAL_H

@@ -3,7 +3,7 @@
 #include <fstream>
 #include <fenv.h>
 #include "resource.h"
-#include <tibsun_globals.h>
+#include "tibsun_globals.h"
 
 static void trim(std::string& str)
 {

@@ -13,6 +13,7 @@ ARRAY_DEF(0x0080A380, int, g_pAudText1B, 5);
 
 bool& g_bSlotText = Make_Global<bool>(0x0074A01C);
 bool& g_bWindowed = Make_Global<bool>(0x007A1790);
+bool& g_HighResolution = Make_Global<bool>(0x007E4745);
 char& g_Delimiter = Make_Global<char>(0x00709740);
 
 int& g_WndWidth = Make_Global<int>(0x0074C268);
@@ -32,6 +33,7 @@ DSurface*& g_SurComposite = Make_Global<DSurface*>(0x0074C5EC);
 DSurface*& g_SurTile = Make_Global<DSurface*>(0x0074C5CC);
 
 PaletteClass& g_PalOriginal = Make_Global<PaletteClass>(0x0074B338);
+ColorScheme**& g_ArrCS = Make_Global<ColorScheme**>(0x0080A2CC);
 
 DEFINE_IMPLEMENTATION(int GetTime(), 0x0060AB10)
 

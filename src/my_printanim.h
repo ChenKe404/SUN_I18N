@@ -26,7 +26,7 @@ struct MYPrintAnim : public MSAnim
 protected:
     const MyFont::CharPtrs* pChrs;
     MyFont* pFnt;
-    int nCurChar;           // 褰撳墠瀛楃
+    int nCurChar;           // 当前字符
     Rect mRect;
 };
 
@@ -46,8 +46,8 @@ protected:
     const MyFont::Lines *pLines;
     
     int nOY;
-    int nCurLine;       // 褰撳墠椤电涓�琛岀殑绱㈠紩
-    int nPerPage;       // 姣忛〉琛屾暟
+    int nCurLine;       // 当前页第一行的索引
+    int nPerPage;       // 每页行数
 };
 
 #endif // !MY_PRINTANIM_H

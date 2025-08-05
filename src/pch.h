@@ -18,7 +18,7 @@ extern "C" {
 extern HINSTANCE hInstance;
 extern std::string g_module_dir;
 extern std::vector<std::string> g_search_dirs;
-extern int g_cliX, g_cliY;  // 涓荤獥鍙ｅ鎴峰尯璧峰鍧愭爣
+extern int g_cliX, g_cliY;  // 主窗口客户区起始坐标
 
 extern struct {
     bool hide_unit_select;
@@ -26,7 +26,7 @@ extern struct {
     std::string loc;
 } g_setting;
 
-// 鏍囧噯鍖栧瓧绗︿覆涓殑鎹㈣绗︿负unix鏍囧噯
+// 标准化字符串中的换行符为unix标准
 void unix_line_feed(char* str);
 
 void get_module_dir();

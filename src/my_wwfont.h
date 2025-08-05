@@ -24,8 +24,8 @@ private:
 	void Parser(const char*);
 private:
 	MyFont* _pFnt;
-	MyFont::CharPtrs _last_chrs;	// ä¸Šæ¬¡çš„æ–‡æœ¬çš„å­—ç¬¦åˆ—è¡¨
-	std::string _last_str;			// ä¸Šæ¬¡çš„æ–‡æœ¬
+	MyFont::CharPtrs _last_chrs;	// ÉÏ´ÎµÄÎÄ±¾µÄ×Ö·ûÁĞ±í
+	std::string _last_str;			// ÉÏ´ÎµÄÎÄ±¾
 };
 
 struct MYWWFont;
