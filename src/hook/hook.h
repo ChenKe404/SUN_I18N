@@ -5,6 +5,37 @@
 
 namespace ck
 {
+	// from_member 从成员获取类
+	template <typename T>
+	struct from_member
+	{
+		static_assert("You need to specify a member function!");
+	};
+
+	template <typename M, typename T>
+	struct from_member< M T::* >
+	{
+		using type = T;
+	};
+
+	// normal_func 获得任意函数的普通函数形式
+	template <typename T>
+	struct normal_func
+	{
+		using type = void;
+	};
+
+	template <typename R, typename ...Args>
+	struct normal_func< R(Args...) >
+	{
+		using type = R(*)(Args...);
+	};
+
+	template <typename R, typename C, typename ...Args>
+	struct normal_func< R(C::*)(Args...) >
+	{
+		using type = R(*)(Args...);
+	};
 
 	class HookBase
 	{
@@ -19,12 +50,12 @@ namespace ck
 			}
 			inline ~guard()
 			{
-				if(_h && _need)
+				if (_h && _need)
 					_h->hook();
 			}
 		private:
 			ck::HookIt* _h;
-			bool _need = false;	// ��¼�Ƿ���Ҫrehook
+			bool _need = false;	// 记录是否需要rehook
 		};
 	public:
 		inline void rehook()
@@ -42,21 +73,22 @@ namespace ck
 		ck::HookItPtr _h;
 	};
 
-	// @_Immediately  �Ƿ�����hook����
-	template<auto _Adr, auto _Detour, bool _Immediately>
+	// @_Immediately  是否立即hook函数
+	template<auto _Target, auto _Detour, bool _Immediately>
 	class Hook : public HookBase
 	{
-		using _Fx = decltype(_Detour);
+		using _Tgt = decltype(_Target);
+		using _Fn = decltype(_Detour);
 		static_assert(
-			std::is_same_v<decltype(_Adr), intptr_t> || std::is_same_v<decltype(_Adr), _Fx>,
-			"_Adr must is a intptr_t address or same type function with _Detour!"
+			std::is_same_v<_Tgt, intptr_t> || std::is_same_v<_Tgt, _Fn>,
+			"_Target must is a intptr_t function address or same type function with _Detour!"
 			);
 	public:
 		Hook()
-			: _fold(_Fx(_Adr))
+			: _fold(_Fn(_Target))
 		{
-			_Fx fx = _Detour;
-			_h = ck::make_hook((void*)_Adr, (void*)fx);
+			_Fn fx = _Detour;
+			_h = ck::make_hook((void*)_Target, (void*)fx);
 			if (_Immediately)
 				rehook();
 		}
@@ -68,35 +100,30 @@ namespace ck
 			return _fold(std::forward<_Args>(args)...);
 		}
 	private:
-		_Fx _fold;
+		_Fn _fold;
 	};
 
 #define DEF_HOOK(addr,fx,immediately,varname) \
 inline static ck::Hook<addr,fx,immediately> varname = {};
 
-	template <typename T>
-	struct from_member
-	{
-		static_assert("You need to specify a member function!");
-	};
-
-	template <typename M, typename T>
-	struct from_member< M T::* >
-	{
-		using type = T;
-	};
-
-	template<uintptr_t _Adr, auto _Detour, bool _Immediately>
+	template<auto _Target, auto _Detour, bool _Immediately>
 	class HookMem : public HookBase
 	{
-		using _Fx = decltype(_Detour);
-		using _Class = typename from_member<_Fx>::type;
+		using _Tgt = decltype(_Target);
+		using _Fn = decltype(_Detour);
+		using _Class = typename from_member<_Fn>::type;
+		template<typename T>
+		using normal_func_t = typename normal_func<T>::type;
+		static_assert(
+			std::is_same_v<_Tgt, intptr_t> || std::is_same_v<normal_func_t<_Tgt>, normal_func_t<_Fn>>,
+			"_Target must is a intptr_t function address or same declaration function with _Detour!"
+			);
 	public:
-		HookMem()
+		HookMem() : f(whatever_cast<_Fn>(_Target))
 		{
 			auto pdetour = _Detour;
-			_h = ck::make_hook((void*)_Adr, *(void**)&pdetour);
-			if(_Immediately)
+			_h = ck::make_hook(whatever_cast<void*>(_Target), *(void**)&pdetour);
+			if (_Immediately)
 				rehook();
 		}
 
@@ -104,37 +131,21 @@ inline static ck::Hook<addr,fx,immediately> varname = {};
 		auto operator()(_Class* that, _Args... args)
 		{
 			guard g(_h.get());
-			return (that->*_un.f)(std::forward<_Args>(args)...);
+			return (that->*f)(std::forward<_Args>(args)...);
 		}
 
 		template<typename... _Args>
 		auto operator()(const _Class* that, _Args... args)
 		{
 			guard g(_h.get());
-			return (that->*_un.f)(std::forward<_Args>(args)...);
+			return (that->*f)(std::forward<_Args>(args)...);
 		}
 	private:
-		union
-		{
-			_Fx f;
-			void* p = (void*)_Adr;
-		} _un;
+		_Fn f;
 	};
 
 #define DEF_HOOKMEM(addr,mem,immediately,varname) \
 inline static ck::HookMem<addr,mem,immediately> varname = {};
-
-template<typename Fx>
-inline Fx memfunc(uintptr_t adr)
-{
-	union
-	{
-		Fx f;
-		void* p = nullptr;
-	} _un;
-	_un.p = (void*)adr;
-	return  _un.f;
-}
 
 }
 

@@ -50,7 +50,7 @@ struct Ingame
 	void ingame_vqa_load()
 	{
 		using Fx = void(Ingame::*)();
-		auto fn = ck::memfunc<Fx>(0x00564630);
+		auto fn = ck::whatever_cast<Fx>(0x00564630);
 		auto that = (VQAFile*)this;
 		(this->*fn)();
 
@@ -70,7 +70,7 @@ struct Ingame
 	bool ingame_vqa_frame(bool* a2)
 	{
 		using Fx = bool(Ingame::*)(bool*);
-		auto fn = ck::memfunc<Fx>(0x0066BC30);
+		auto fn = ck::whatever_cast<Fx>(0x0066BC30);
 		auto that = (VQAClass*)this;
 		const auto ret = (this->*fn)(a2);
 		if (that == g_vqa)

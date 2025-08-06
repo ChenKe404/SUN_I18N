@@ -60,6 +60,25 @@ namespace ck
         return HookIt::$(old_func_ptr, new_func_ptr);
     }
 
+    template<typename T,typename F>
+    inline T whatever_cast(F adr)
+    {
+        static_assert(sizeof(F) == sizeof(T), "The sizeof(F) must equal sizeof(T)!");
+        return *reinterpret_cast<T*>(&adr);
+    }
+
+    // // 从地址转换为
+    // template<typename T>
+    // inline T from_adr(void* adr)
+    // { return *reinterpret_cast<T*>(&adr); }
+
+    // // 转换为地址
+    // template<typename T>
+    // inline void* to_adr(T t)
+    // {
+    //     static_assert(sizeof(t) >= sizeof(void*), "The size of type must geater than or equal a pointer size!");
+    //     return *reinterpret_cast<void**>(&t);
+    // }
 }
 
 #endif //CK_HOOK_IT_H
