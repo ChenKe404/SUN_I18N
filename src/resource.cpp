@@ -2,7 +2,7 @@
 
 MyText g_text;
 
-ck::Font g_ck_fnt8ro;
+ck::Font g_ck_fnt10ro;
 ck::Font g_ck_fnt12r;
 ck::Font g_ck_fnt12ro;
 ck::Font g_ck_fnt16r;
@@ -21,9 +21,9 @@ bool init_resource()
 {
     const auto loc_dir = g_module_dir + "i18n/" + g_setting.loc + "/";
     // 8点 常规 + 轮廓
-    std::string path = loc_dir + "fnt8ro.ckf";
+    std::string path = loc_dir + "fnt10ro.ckf";
     if (g_setting.small_font_cameo)
-        g_ck_fnt8ro.open(path);
+        g_ck_fnt10ro.open(path);
 
     // 12点 常规
     path = loc_dir + "fnt12r.ckf";
@@ -58,8 +58,8 @@ bool init_resource()
     }
 
     auto opts = &g_fnt_cameo.options();
-    if(g_ck_fnt8ro.valid())
-        g_fnt_cameo.attach(&g_ck_fnt8ro);
+    if(g_ck_fnt10ro.valid())
+        g_fnt_cameo.attach(&g_ck_fnt10ro);
     else
         g_fnt_cameo.attach(&g_ck_fnt12ro);
     opts->align = 0;
