@@ -21,8 +21,9 @@ extern std::vector<std::string> g_search_dirs;
 extern int g_cliX, g_cliY;  // 主窗口客户区起始坐标
 
 extern struct {
-    bool hide_unit_select;
-    bool show_subtitle;
+    bool hide_unit_select = true;
+    bool show_subtitle = true;
+    bool small_font_cameo = false;
     std::string loc;
 } g_setting;
 
@@ -44,7 +45,7 @@ int wide_to_u8(const wchar_t* wide, std::string& out);
 int wide_to_u32(const wchar_t* wide, std::u32string& out);
 
 inline void u8_to_u32(const char* u8str, std::u32string& out) {
-    ck::Text::u8to32(u8str, out);
+    ck::Text::u8to32(out, u8str);
 }
 
 inline int ansi_to_u32(const char* ansi, std::u32string& out) {

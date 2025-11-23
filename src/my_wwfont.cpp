@@ -74,7 +74,7 @@ void MYWWFont::Parser(const char* u8str)
 	if (_last_str.compare(u8str) == 0)
 		return;
 	std::u32string tmp;
-	ck::Text::u8to32(u8str, tmp);
+	ck::Text::u8to32(tmp, u8str);
 	_last_chrs = _pFnt->cs(tmp);
 }
 

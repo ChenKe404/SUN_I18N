@@ -11,19 +11,20 @@ static void draw_slot_text(char* u8str, Point2D* pPt, Rect* pRect, int nSlotWidt
 	int x = pRect->X + pPt->X;
 	int y = pRect->Y + pPt->Y + 7;	// 绘制槽文本默认有一行的高度(8), 这里直接到槽的底部
 	std::u32string u32str;
-	to_u32str(u8str, u32str);
-	auto chrs = g_fnt12o.cs(u32str);
+	to_u32str(u32str,u8str);
+	auto& fnt = g_fnt_cameo;
+	auto chrs = fnt.cs(u32str);
 
 	auto cs = ColorScheme::As_Pointer("LightGrey", 1);
 
-	auto& opts = g_fnt12o.options();
+	auto& opts = fnt.options();
 	auto old = opts.spacingX;
 	opts.spacingX = 1;
-	auto box = g_fnt12o.measure(chrs, nSlotWidth, -1);
-	auto old_mix = g_fnt12o.mixColor();
-	g_fnt12o.setMixColor(to_color(cs->HSV));
-	g_fnt12o.draw(chrs, g_SurSidebar, x, y - box.Height, nSlotWidth);
-	g_fnt12o.setMixColor(old_mix);
+	auto box = fnt.measure(chrs, nSlotWidth, -1);
+	auto old_mix = fnt.mixColor();
+	fnt.setMixColor(to_color(cs->HSV));
+	fnt.draw(chrs, g_SurSidebar, x, y - box.Height, nSlotWidth);
+	fnt.setMixColor(old_mix);
 	opts.spacingX = old;
 }
 

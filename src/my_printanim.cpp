@@ -24,7 +24,7 @@ MYPrintAnim::~MYPrintAnim()
 {
 #ifdef _DEBUG
     __asm { sub esp, 4 }		// Õ»Æ½ºâ
-#endif // !_DEBUG
+#endif // _DEBUG
 }
 
 bool MYPrintAnim::Set_Playing(bool playing)

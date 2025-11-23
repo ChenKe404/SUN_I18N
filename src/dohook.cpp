@@ -77,7 +77,7 @@ int __fastcall Re_Draw_Dlg_Text(Surface* pSur, const char* lpText, RECT* pRect, 
 	auto u8 = g_text.u8(lpText);
 
 	std::u32string u32str;
-	to_u32str(u8, u32str);
+	to_u32str(u32str, u8);
 	auto chrs = g_fnt_ui.cs(u32str);
 	auto& opts = g_fnt_ui.options();
 	auto old = opts.align;

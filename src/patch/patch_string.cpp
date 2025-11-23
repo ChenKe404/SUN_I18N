@@ -1,7 +1,7 @@
-#include <technotype.h>
+ï»¿#include <technotype.h>
 
 /*
-* ÓÎÏ·´Óini¼ÓÔØ¿Æ¼¼ÅäÖÃÊ±½«¿Æ¼¼Ãû³Æ×ª»»Îªutf8±àÂëµÄÒëÎÄ
+* æ¸¸æˆä»iniåŠ è½½ç§‘æŠ€é…ç½®æ—¶å°†ç§‘æŠ€åç§°è½¬æ¢ä¸ºutf8ç¼–ç çš„è¯‘æ–‡
 */
 
 static void __stdcall local_memcpy(char* dst, const char* src, size_t count)
@@ -10,7 +10,7 @@ static void __stdcall local_memcpy(char* dst, const char* src, size_t count)
 	auto len = std::min(loc.size(), count);
 	if (len > 0)
 	{
-		// NOTE: Ó¢ÎÄ×î¶àÖ§³Ö49¸ö×Ö·û, ×îºóÒ»¸ö×Ö·û»¹±ØĞëÊÇ\0, ±¾µØÃû³Æutf8±àÂë¿ÉÈİÄÉµÄ×Ö·û¿ÉÄÜ¸üÉÙ, ºóĞø¿ÉÄÜĞèÒªÀ©Èİ
+		// NOTE: è‹±æ–‡æœ€å¤šæ”¯æŒ49ä¸ªå­—ç¬¦, æœ€åä¸€ä¸ªå­—ç¬¦è¿˜å¿…é¡»æ˜¯\0, æœ¬åœ°åç§°utf8ç¼–ç å¯å®¹çº³çš„å­—ç¬¦å¯èƒ½æ›´å°‘, åç»­å¯èƒ½éœ€è¦æ‰©å®¹
 		memset(dst, 0, count);
 		memcpy(dst, loc.c_str(), len);
 	}
@@ -22,11 +22,11 @@ void __stdcall local_techno_name(AbstractTypeClass* that)
 	that->FullName[48] = 0;
 }
 
-// ´ÓRules.ini¶ÁÈ¡¿Æ¼¼ÅäÖÃÖ®ºó, ½«¶ÁÈ¡µ½µÄ¿Æ¼¼Ãû³Æ×ª»»Îª±¾µØÃû³Æ
+// ä»Rules.iniè¯»å–ç§‘æŠ€é…ç½®ä¹‹å, å°†è¯»å–åˆ°çš„ç§‘æŠ€åç§°è½¬æ¢ä¸ºæœ¬åœ°åç§°
 __declspec(noinline) __declspec(naked)
 void patch_techno_load()
 {
-	int vret;
+	static int vret = 0;
 	__asm {
 		mov ecx, 0x00588DD0
 		call ecx
@@ -39,11 +39,11 @@ void patch_techno_load()
 	}
 }
 
-// »ğÑæ·ç±©ÓëÔ­°æÂÔÓĞ²»Í¬
+// ç«ç„°é£æš´ä¸åŸç‰ˆç•¥æœ‰ä¸åŒ
 __declspec(noinline) __declspec(naked)
 void patch_techno_load_ini()
 {
-	int vret;
+	static int vret = 0;
 	__asm {
 		push 48
 		lea ecx, [esp+0x14]
@@ -57,6 +57,6 @@ void patch_techno_load_ini()
 
 void init_patch_string()
 {
-	write_cmd(0x0063D9B1, patch_techno_load, OP_JMP);	// Ô­°æ
-	write_cmd(0x00406406, patch_techno_load_ini, OP_JMP);	// »ğÑæ·ç±©
+	write_cmd(0x0063D9B1, patch_techno_load, OP_JMP);	// åŸç‰ˆ
+	write_cmd(0x00406406, patch_techno_load_ini, OP_JMP);	// ç«ç„°é£æš´
 }

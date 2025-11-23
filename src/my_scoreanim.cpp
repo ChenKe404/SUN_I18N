@@ -24,8 +24,8 @@ MYScoreAnim::MYScoreAnim(
 MYScoreAnim::~MYScoreAnim()
 {
 #ifdef _DEBUG
-	__asm { sub esp,4 }		// Õ»Æ½ºâ
-#endif // !_DEBUG
+	__asm { sub esp, 4 }		// Õ»Æ½ºâ
+#endif // _DEBUG
 }
 
 bool MYScoreAnim::Draw(int nFrame)

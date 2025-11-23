@@ -16,7 +16,7 @@ void __stdcall draw_text(MultiScore* ms, int ox, int x, int y)
     auto u8 = g_text.u8(g_string);
     if (u8 != g_string)
         g_string = u8;
-    to_u32str(g_string, u32str);
+    to_u32str(u32str, g_string);
 
     auto fnt = Re_MSFont::fetch(ms->pFnt);
     g_chrs = fnt->cs(u32str);
@@ -48,7 +48,7 @@ void __stdcall format(char*, const char* fmt, ...)
     va_end(va);
 
     std::u32string u32str;
-    to_u32str(buffer, u32str);
+    to_u32str(u32str, buffer);
     g_chrs = g_fullfnt3.cs(u32str);
 }
 
@@ -108,7 +108,7 @@ void __stdcall print_anim_1(MultiScore* ms, int x, int y)
 void __stdcall print_anim_2(MultiScore* ms, int y)
 {
     std::u32string u32str;
-    to_u32str(g_string, u32str);
+    to_u32str(u32str, g_string);
     auto fnt = Re_MSFont::fetch(ms->pFnt);
     g_chrs = fnt->cs(u32str);
     g_width = fnt->measure(g_chrs).Width;

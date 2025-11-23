@@ -212,6 +212,10 @@ void MyFont::attach(ck::Font* fnt)
 	_drawer->setFont(fnt);
 }
 
+ck::Font::Header MyFont::header() const {
+	return _fnt->header();
+}
+
 int MyFont::lineHeight() const
 {
 	if (_fnt) return _fnt->header().lineHeight;
@@ -258,12 +262,12 @@ ck::color MyFont::mixColor() const
 }
 
 Rect MyFont::measure(
-	const CharPtrs& chrs,
+	CharPtrs::const_iterator begin,
+	CharPtrs::const_iterator end,
 	int maxWidth, int maxHeight,
-	Lines* out_lines
-)
+	Lines* out_lines) 
 {
-	auto box = _drawer->measure(chrs, maxWidth, maxHeight, _opts, out_lines);
+	auto box = _drawer->measure(begin, end, maxWidth, maxHeight, _opts, out_lines);
 	return { box.x, box.y, box.w, box.h };
 }
 

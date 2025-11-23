@@ -22,7 +22,7 @@ struct MyText : protected ck::Text
 		static std::u32string u32str;
 		auto trs = super::u32(src, src);
 		if (!trs) {
-			u8to32(src, u32str);
+			u8to32(u32str, src);
 			trs = u32str.c_str();
 		}
 		return trs;
@@ -32,6 +32,7 @@ struct MyText : protected ck::Text
 
 extern MyText g_text;
 
+extern MyFont g_fnt_cameo;
 extern MyFont g_fnt12;
 extern MyFont g_fnt12o;
 extern MyFont g_fnt_subtitle;
@@ -40,22 +41,24 @@ extern MyFont g_fullfnt3;
 extern MyFont g_fullfnt3gdi;
 extern MyFont g_fullfnt3nod;
 
-constexpr auto to_u32str = ck::Text::u8to32;
-
-inline std::string to_u8local(const char* anstr)
-{
-    std::string ret;
-    if (!anstr) return ret;
-	return  g_text.u8(anstr);
+inline void to_u32str(std::u32string& out, ck::Text::u8str in) {
+	return ck::Text::u8to32(out, in);
 }
 
-inline std::u32string to_u32local(const char* anstr)
+inline std::string to_u8local(const char* ansi)
+{
+    std::string ret;
+    if (!ansi) return ret;
+	return  g_text.u8(ansi);
+}
+
+inline std::u32string to_u32local(const char* ansi)
 {
     std::u32string ret; 
-    if (!anstr) return ret;
-    auto str = g_text.u32(anstr);
+    if (!ansi) return ret;
+    auto str = g_text.u32(ansi);
     if (str) ret = str;
-    else ck::Text::u8to32(anstr, ret);   // 没有译文则直接使用原文
+    else ck::Text::u8to32(ret, ansi);   // 没有译文则直接使用原文
     return ret;
 }
 

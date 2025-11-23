@@ -2,11 +2,13 @@
 
 MyText g_text;
 
+ck::Font g_ck_fnt8ro;
 ck::Font g_ck_fnt12r;
 ck::Font g_ck_fnt12ro;
 ck::Font g_ck_fnt16r;
 ck::Font g_ck_fnt16ro;
 
+MyFont g_fnt_cameo;
 MyFont g_fnt12;
 MyFont g_fnt12o;
 MyFont g_fnt_subtitle;
@@ -18,9 +20,14 @@ MyFont g_fullfnt3nod;
 bool init_resource()
 {
     const auto loc_dir = g_module_dir + "i18n/" + g_setting.loc + "/";
+    // 8点 常规 + 轮廓
+    std::string path = loc_dir + "fnt8ro.ckf";
+    if (g_setting.small_font_cameo)
+        g_ck_fnt8ro.open(path);
+
     // 12点 常规
-    std::string path = loc_dir +"fnt12r.ckf";
-    if (!g_ck_fnt12r.load(path))
+    path = loc_dir + "fnt12r.ckf";
+    if (!g_ck_fnt12r.open(path))
     {
         error("cannot found font: " + path, "Font Lost");
         return false;
@@ -28,7 +35,7 @@ bool init_resource()
 
     // 12点 常规 + 轮廓
     path = loc_dir + "fnt12ro.ckf";
-    if (!g_ck_fnt12ro.load(path))
+    if (!g_ck_fnt12ro.open(path))
     {
         error("cannot found font: " + path, "Font Lost");
         return false;
@@ -36,7 +43,7 @@ bool init_resource()
 
     // 16点 常规
     path = loc_dir + "fnt16r.ckf";
-    if (!g_ck_fnt16r.load(path))
+    if (!g_ck_fnt16r.open(path))
     {
         error("cannot found font: " + path,"Font Lost");
         return false;
@@ -44,14 +51,22 @@ bool init_resource()
 
     // 16点 常规 + 轮廓
     path = loc_dir + "fnt16ro.ckf";
-    if (!g_ck_fnt16ro.load(path))
+    if (!g_ck_fnt16ro.open(path))
     {
         error("cannot found font: " + path, "Font Lost");
         return false;
     }
 
+    auto opts = &g_fnt_cameo.options();
+    if(g_ck_fnt8ro.valid())
+        g_fnt_cameo.attach(&g_ck_fnt8ro);
+    else
+        g_fnt_cameo.attach(&g_ck_fnt12ro);
+    opts->align = 0;
+    opts->breakWord = true;
+
+    opts = &g_fnt12.options();
     g_fnt12.attach(&g_ck_fnt12r);
-    auto opts = &g_fnt12.options();
     opts->spacingY = 1;
     opts->align = 0;
     opts->breakWord = true;

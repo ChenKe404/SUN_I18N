@@ -2,6 +2,7 @@
 #include <blit/xsurface.h>
 #include <dohook.h>
 #include "resource.h"
+#include "re_msglist.h"
 
 /*
 * 游戏中的任务消息
@@ -9,14 +10,16 @@
 
 class ColorScheme;
 
-static Point2D simple_text_print(const char* anstr, XSurface* pSur, Rect* pRect, Point2D* pPt, ColorScheme* a5, unsigned, int nStyle, int)
+static Point2D simple_text_print(const char* utf8, XSurface* pSur, Rect* pRect, Point2D* pPt, ColorScheme* a5, unsigned, int nStyle, int)
 {
-	return MYSimple_Text_Print(to_u32local(anstr), pSur, pRect, pPt, a5, nStyle);
+	std::u32string u32;
+	to_u32str(u32, utf8);
+	return MYSimple_Text_Print(u32, pSur, pRect, pPt, a5, nStyle);
 }
 
-static Point2D conquer_clip_text_print(const char* anstr, XSurface* pSur, Rect* pRect, Point2D* pPt, ColorScheme*, unsigned, int nStyle, int, const int*)
+static Point2D conquer_clip_text_print(const char* utf8, XSurface* pSur, Rect* pRect, Point2D* pPt, ColorScheme*, unsigned, int nStyle, int, const int*)
 {
-	return simple_text_print(anstr, pSur, pRect, pPt, 0, 0, nStyle, 0);
+	return simple_text_print(utf8, pSur, pRect, pPt, 0, 0, nStyle, 0);
 }
 
 static Point2D fancy_text_print(const char* ansi, XSurface* pSur, Rect* pRect, Point2D* pPt, ColorScheme* a5, unsigned, int nStyle, ...)
@@ -37,7 +40,15 @@ static Point2D fancy_text_print(const char* ansi, XSurface* pSur, Rect* pRect, P
 
 void init_patch_message()
 {
-	write_cmd(0x0064D187, simple_text_print, OP_CALL);	// 游戏中的左上角消息; 注意:这个消息的行高是固定的
-	//write_cmd(0x0064D1E0, conquer_clip_text_print, OP_CALL);	// 消息的另一个分支, 暂时注释, 遇到再细看
+	Re_MessageList::H_Init.rehook();
+	Re_MessageList::H_Add_Message.rehook();
+	// 遭遇战文本
+	write_cmd(0x004BF5FF, Re_Fetch_String, OP_CALL);	// 被击败
+	write_cmd(0x004BF682, Re_Fetch_String, OP_CALL);	// 被击败
+	write_cmd(0x004BDDE5, Re_Fetch_String, OP_CALL);	// 结盟
+	write_cmd(0x004BE016, Re_Fetch_String, OP_CALL);	// 宣战
+
+	write_cmd(0x0064D187, simple_text_print, OP_CALL);	// 游戏中的左上角消息
+	write_cmd(0x0064D1E0, conquer_clip_text_print, OP_CALL);	// 消息的另一个分支, 暂时注释, 遇到再细看
 	write_cmd(0x005ADF94, fancy_text_print, OP_CALL);	// 进度条提示文本
 }

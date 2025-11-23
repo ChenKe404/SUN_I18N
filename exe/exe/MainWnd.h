@@ -4,6 +4,8 @@
 
 #pragma once
 #include <map>
+#include <mini/ini.h>
+using namespace mINI;
 
 class CMainWnd : public CDialogEx
 {
@@ -16,6 +18,7 @@ public:
 	void OnCancel() override;
 protected:
 	void loadLang(const char* loc);
+	void trans(HWND, INIStructure&);
 	void updateSetting(bool save);
 protected: 
 	DECLARE_DYNAMIC(CMainWnd)
@@ -29,6 +32,7 @@ protected:
 	BOOL _chk_windowed;
 	BOOL _chk_hide_unit_select;
 	BOOL _chk_movie_subtitle;
+	BOOL _chk_small_font_cameo;
 	std::map<HWND, std::string> _ctl_text;
 
 // 生成的消息映射函数

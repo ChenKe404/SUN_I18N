@@ -26,6 +26,7 @@ public:
 
 	void attach(ck::Font* fnt);
 
+	ck::Font::Header header() const;
 	int lineHeight() const;
 	int maxCharWidth() const;
 	int charWidth(char32_t) const;
@@ -46,11 +47,22 @@ public:
 	ck::color mixColor() const;
 
 	Rect measure(
-		const CharPtrs& chrs,
+		CharPtrs::const_iterator begin,
+		CharPtrs::const_iterator end,
 		int maxWidth = -1,
 		int maxHeight = -1,
 		Lines* out_lines = nullptr
 	);
+
+	inline Rect measure(
+		const CharPtrs& chrs,
+		int maxWidth = -1,
+		int maxHeight = -1,
+		Lines* out_lines = nullptr
+	) 
+	{
+		return measure(chrs.begin(), chrs.end(), maxWidth, maxHeight, out_lines);
+	}
 
 	bool draw(
 		CharPtrs::const_iterator begin,

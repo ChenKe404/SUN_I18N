@@ -72,8 +72,13 @@ int wide_to_u8(const wchar_t* wide, std::string& out)
 int wide_to_u32(const wchar_t* wide, std::u32string& out)
 {
     out.clear();
-    ck::Text::u16to32(wide, out);
+    ck::Text::u16to32(out, wide);
     return out.size();
+}
+
+inline int u32_to_wide(const char32_t* u32, std::wstring& out) {
+    out.clear();
+    ck::Text::u32to16(out, u32);
 }
 
 std::string find_file(
@@ -140,6 +145,7 @@ void load_setting()
     auto& sec = ini["Setting"];
     g_setting.hide_unit_select = equalnc(sec["HideUnitSelect"].c_str(), "Yes");
     g_setting.show_subtitle = equalnc(sec["MovieSubtitle"].c_str(), "Yes");
+    g_setting.small_font_cameo = equalnc(sec["SmallFontCameo"].c_str(), "Yes");
     g_setting.loc = sec["Lang"];
     if (g_setting.loc.empty())
         g_setting.loc = "en-us";

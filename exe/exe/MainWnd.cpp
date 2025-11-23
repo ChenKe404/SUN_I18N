@@ -8,8 +8,6 @@
 #include "inject.h"
 #include <algorithm>
 #define MINI_CASE_SENSITIVE
-#include <mini/ini.h>
-using namespace mINI;
 
 #include "MainWnd.h"
 
@@ -29,16 +27,17 @@ void CMainWnd::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_CHK_WINDOWED, _chk_windowed);
 	DDX_Check(pDX, IDC_CHK_UNIT_LINE, _chk_hide_unit_select);
 	DDX_Check(pDX, IDC_CHK_SUBTITLE, _chk_movie_subtitle);
+	DDX_Check(pDX, IDC_CHK_SMALLFONT_CAMEO, _chk_small_font_cameo);
 }
 
-std::string make_local_desc(LCID lcid)
+std::wstring make_local_desc(LCID lcid)
 {
-	char buf[256];
-	std::string desc;
-	auto ret = GetLocaleInfoA(lcid, LOCALE_SNATIVELANGNAME, buf, 256);
+	wchar_t buf[256];
+	std::wstring desc;
+	auto ret = GetLocaleInfoW(lcid, LOCALE_SNATIVELANGNAME, buf, 256);
 	if (ret > 0) desc.append(buf);
-	ret = GetLocaleInfoA(lcid, LOCALE_SNATIVECTRYNAME, buf, 256);
-	if (ret > 0) desc.append(" - ").append(buf);
+	ret = GetLocaleInfoW(lcid, LOCALE_SNATIVECTRYNAME, buf, 256);
+	if (ret > 0) desc.append(L" - ").append(buf);
 	return desc;
 }
 
@@ -114,9 +113,8 @@ BOOL CMainWnd::OnInitDialog()
 	else
 	{
 		auto desc = make_local_desc(lcid);
-		if (desc.empty()) desc = "en-US";
-		ansi_to_wide(desc.c_str(), wstr);
-		idx = _cob_lang.AddString(wstr.c_str());
+		if (desc.empty()) desc = L"en-US";
+		idx = _cob_lang.AddString(desc.c_str());
 	}
 	if (equalnc("en-US", sys_loc.c_str()))
 		sel_idx = idx;
@@ -137,9 +135,9 @@ BOOL CMainWnd::OnInitDialog()
 		else
 		{
 			auto desc = make_local_desc(lcid);
-			if (desc.empty()) desc = it;
-			ansi_to_wide(desc.c_str(), wstr);
-			idx = _cob_lang.AddString(wstr.c_str());
+			if (desc.empty())
+				desc = wstr;
+			idx = _cob_lang.AddString(desc.c_str());
 		}
 		if (equalnc(it.c_str(), sys_loc.c_str()))
 			sel_idx = idx;
@@ -200,23 +198,23 @@ void CMainWnd::loadLang(const char* loc)
 	if (!fi.read(ini))
 		return;
 
-	char text[256];
-	GetWindowTextA(m_hWnd, text, 256);
-	auto& trs = ini[text]["Text"];
-	if (!trs.empty())
-		SetWindowTextA(m_hWnd, trs.c_str());
-
+	trans(m_hWnd, ini);
 	auto hChild = ::GetWindow(m_hWnd, GW_CHILD);
 	while (hChild)
 	{
 		if (hChild != _cob_lang)
-		{
-			GetWindowTextA(hChild, text, 256);
-			auto& trs = ini[text]["Text"];
-			if (!trs.empty())
-				SetWindowTextA(hChild, trs.c_str());
-		}
+			trans(hChild, ini);
 		hChild = ::GetNextWindow(hChild, GW_HWNDNEXT);
+	}
+}
+
+void CMainWnd::trans(HWND hWnd, INIStructure& ini)
+{
+	auto iter = _ctl_text.find(hWnd);
+	if (iter != _ctl_text.end())
+	{
+		const auto& trs = ini[iter->second]["Text"];
+		SetWindowTextA(hWnd, trs.c_str());
 	}
 }
 
@@ -237,6 +235,7 @@ void CMainWnd::updateSetting(bool save)
 		sec["Windowed"] = _chk_windowed ? "Yes" : "No";
 		sec["HideUnitSelect"] = _chk_hide_unit_select ? "Yes" : "No";
 		sec["MovieSubtitle"] = _chk_movie_subtitle ? "Yes" : "No";
+		sec["SmallFontCameo"] = _chk_small_font_cameo ? "Yes" : "No";
 		fi.write(ini, true);
 	}
 	else
@@ -247,6 +246,7 @@ void CMainWnd::updateSetting(bool save)
 		_chk_windowed = equalnc(sec.get("Windowed").c_str(),"Yes");
 		_chk_hide_unit_select = equalnc(sec.get("HideUnitSelect").c_str(),"Yes");
 		_chk_movie_subtitle = equalnc(sec.get("MovieSubtitle").c_str(),"Yes");
+		_chk_small_font_cameo = equalnc(sec.get("SmallFontCameo").c_str(),"Yes");
 		if (!loc.empty())
 		{
 			if (equalnc(loc.c_str(), "en-us"))

@@ -9,17 +9,17 @@ HWND g_MainWnd;
 
 struct resol
 {
-	int width, height;
-	inline bool operator<(const resol& o) const
-	{
-		if (width < o.width)
-			return true;
-		if (width > o.width)
-			return false;
-		if (height < o.height)
-			return true;
-		return false;
-	}
+    int width, height;
+    inline bool operator<(const resol& o) const
+    {
+        if (width < o.width)
+            return true;
+        if (width > o.width)
+            return false;
+        if (height < o.height)
+            return true;
+        return false;
+    }
 };
 
 static const int* __fastcall enum_resolution(int, int, int, int, int)
@@ -40,7 +40,7 @@ static const int* __fastcall enum_resolution(int, int, int, int, int)
 	}
 
 	std::vector<int> resolution;
-	if (primaryDevice)
+	if(primaryDevice)
 	{
 		// 枚举所有显示模式
 		DEVMODE devMode = {};
@@ -57,7 +57,7 @@ static const int* __fastcall enum_resolution(int, int, int, int, int)
 			resols.insert({ (int)devMode.dmPelsWidth, (int)devMode.dmPelsHeight });
 		}
 
-		resolution.reserve(resols.size() + 1);
+		resolution.reserve(resols.size()+1);
 		for (auto& it : resols)
 		{
 			resolution.push_back(it.width);
@@ -84,7 +84,7 @@ static const int* __fastcall enum_resolution(int, int, int, int, int)
 
 static void* __fastcall patch_unit_select(const char* fileName)
 {
-	static const auto Fx = (void* (*)(const char*))0x00559DE0;
+	static const auto Fx = (void*(*)(const char*))0x00559DE0;
 	auto hrc = FindResourceA(hInstance, MAKEINTRESOURCEA(IDR_SHP_UNIT_SELECT), "SHP");
 	if (!hrc) return Fx(fileName);
 	auto hg = LoadResource(hInstance, hrc);

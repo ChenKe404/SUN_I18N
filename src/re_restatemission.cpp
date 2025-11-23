@@ -5,6 +5,7 @@
 #include "tspp_ex/definitions.h"
 #include "my_wordanim.h"
 #include "dohook.h"
+#include <mutex>
 
 MyFont::CharPtrs g_chrs;
 std::list<MyFont::Lines> g_pages;

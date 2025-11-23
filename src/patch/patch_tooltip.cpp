@@ -34,11 +34,11 @@ static Point2D plain_text_print_0(char const* u8str, XSurface* pSur, Rect* pRect
 	if (pPt->Y < pRect->Y)	// 避免画到顶部功能条上, 顶部功能条不是每次都重绘
 		return { 0,0 };
 	static std::u32string u32str;
-	to_u32str(u8str, u32str);
+	to_u32str(u32str, u8str);
 	return MYSimple_Text_Print(u32str, pSur, pRect, pPt, g_ArrCS[cst], nStyle);
 }
 
-static Point2D plain_text_print_1(int uID, XSurface* pSur, Rect* pRect, Point2D* pPt, int a5, unsigned, int nStyle, ColorSchemeType cst, int)
+static Point2D plain_text_print_1(int uID, XSurface* pSur, Rect* pRect, Point2D* pPt,int a5, unsigned, int nStyle, ColorSchemeType cst, int)
 {
 	return plain_text_print_0(Re_Fetch_String(uID), pSur, pRect, pPt, a5, 0, nStyle, COLORSCHEME_NONE, 0);
 }

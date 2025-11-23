@@ -16,7 +16,7 @@ static Point2D __stdcall fancy_text_print_0(int uID, XSurface* pSur, Rect* pRect
 	vsprintf(buffer, u8str, va);
 	va_end(va);
 
-	to_u32str(buffer, u32str);
+	to_u32str(u32str, buffer);
 	int x = pRect->X + pPt->X;
 	int y = pRect->Y + pPt->Y;
 

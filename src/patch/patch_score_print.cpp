@@ -9,7 +9,7 @@ static const char* u8str;
 ScoreAnimClass* __stdcall make_score_anim(int nX, int nY, int align)
 {
     std::u32string u32str;
-    to_u32str(u8str, u32str);
+    to_u32str(u32str, u8str);
     auto& fnt = Scen->IsGDI ? g_fullfnt3gdi : g_fullfnt3nod;
     auto chrs = fnt.cs(u32str);
     if (align == 1)  // жа
