@@ -10,6 +10,7 @@
 #include "tspp_ex/globals.h"
 #include <tspp/src/lib/rgb.h>
 #include <tspp/src/lib/hsv.h>
+#include "tspp_ex/definitions.h"
 
 extern "C" {
     __declspec(dllexport) void sun();
@@ -106,6 +107,5 @@ static void prepare_text(C* lpText)
             lpText[i] = '\n';
     }
 }
-
 
 #endif // PCH_H

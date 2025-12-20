@@ -16,7 +16,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
 
-add_compile_options(/utf-8 /Od)
+add_compile_options(/utf-8 /Od)     # 禁用优化; 启用优化容易崩溃
 
 set(_BUILD_TIME_CHECK_GIT FALSE)
 add_subdirectory(3rd/ckfont)

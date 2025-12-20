@@ -37,6 +37,9 @@ LONG Ctrl_Draw_Text(
     XSurface* a8
 );
 
+//void* operator_new(size_t);
+//void operator_delete(void*);
+
 template<typename C>
 inline int strlen(const C* lpText) 
 { return std::char_traits<C>::length(lpText); }

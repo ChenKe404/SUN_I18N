@@ -55,6 +55,9 @@ DEFINE_IMPLEMENTATION(LONG Ctrl_Draw_Text(
     XSurface* a8
 ), 0x0059F1D0)
 
+//DEFINE_IMPLEMENTATION(void* operator_new(size_t), 0x006B51D7)
+//DEFINE_IMPLEMENTATION(void operator_delete(void*), 0x006B51CC)
+
 DEFINE_IMPLEMENTATION(void MSFont::Release(bool), 0x005727B0)
 DEFINE_IMPLEMENTATION(int MSFont::Get_Char_Width(char), 0x00572400)
 DEFINE_IMPLEMENTATION(int MSFont::Get_Text_Width(const char*), 0x005723B0)

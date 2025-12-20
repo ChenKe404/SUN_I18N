@@ -67,18 +67,13 @@ namespace ck
         return *reinterpret_cast<T*>(&adr);
     }
 
-    // // 从地址转换为
-    // template<typename T>
-    // inline T from_adr(void* adr)
-    // { return *reinterpret_cast<T*>(&adr); }
 
-    // // 转换为地址
-    // template<typename T>
-    // inline void* to_adr(T t)
-    // {
-    //     static_assert(sizeof(t) >= sizeof(void*), "The size of type must geater than or equal a pointer size!");
-    //     return *reinterpret_cast<void**>(&t);
-    // }
+    template<intptr_t Adr, typename T, typename... Args>
+    inline void construct(T* o,Args... args) {
+        auto fn = whatever_cast<void(T::*)(Args...)>(Adr);
+        (o->*fn)(std::forward<Args>(args)...);
+    }
+
 }
 
 #endif //CK_HOOK_IT_H

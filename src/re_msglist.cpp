@@ -4,6 +4,7 @@
 #include <voc.h>
 #include "my_wwfont.h"
 #include "resource.h"
+#include <common/patch.h>
 #include <tspp_ex/definitions.h>
 
 int32_t& nInterval_74C610 = Make_Global<int32_t>(0x0074C610);
@@ -15,7 +16,7 @@ int Re_MessageList::Init(
     int a6, int a7, int a8, bool a9, 
     int a10, int a11, int a12
 ) {
-    a6 = g_fnt12o.lineHeight() + 2;
+    a6 = g_fnt12o.lineHeight();
     if (a6 < 1) a6 = 14;
     else a6 += 2;   // 多两个像素间隔
     return H_Init(this, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
@@ -108,7 +109,7 @@ TextLabelClass* Re_MessageList::Add_Message(const char* a2, int a3, char* messag
                         break;
                     }
                 }
-                delete cur; // 删除消息对象
+                delete cur;
             }
         }
         // 判断消息列表是否已满, 如果已满则直接返回不处理

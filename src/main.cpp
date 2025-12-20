@@ -1,17 +1,66 @@
 ﻿#include <iostream>
 #include <dohook.h>
+#include <minidumpapiset.h>
+#pragma comment(lib, "dbghelp.lib")
+#include "common/patch.h"
 
 char tmp[2048];
 
 template<typename ..._Args>
 void output_debug(const char* fmt, _Args... args)
 {
+#ifndef NDEBUG
     sprintf(tmp, fmt, std::forward<_Args>(args)...);
     OutputDebugStringA(tmp);
     OutputDebugStringA("\n");
+#endif
 }
 
 extern void init_patch();
+
+static LPVOID g_handle;
+LONG WINAPI _UnhandledExceptionFilter_(PEXCEPTION_POINTERS pExceptionInfo)
+{
+    time_t t = time(NULL);
+    struct tm tm;
+    localtime_s(&tm, &t);
+
+    char name[MAX_PATH];
+    sprintf(name, "dump_i18n_%04d%02d%02d_%02d%02d%02d.dmp",
+        tm.tm_year + 1900,
+        tm.tm_mon + 1,
+        tm.tm_mday,
+        tm.tm_hour,
+        tm.tm_min,
+        tm.tm_sec
+    );
+
+    auto path = g_module_dir + "dump/";
+    DWORD dwAttrib = GetFileAttributesA(path.c_str());
+    const auto exists = (dwAttrib != INVALID_FILE_ATTRIBUTES && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+    if (exists || CreateDirectoryA(path.c_str(), NULL))
+    {
+        path.append(name);
+        HANDLE hFile = CreateFileA(path.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+        if (hFile != INVALID_HANDLE_VALUE)
+        {
+            MINIDUMP_EXCEPTION_INFORMATION mdei{ 0 };
+            mdei.ThreadId = GetCurrentThreadId();
+            mdei.ExceptionPointers = pExceptionInfo;
+            mdei.ClientPointers = FALSE;
+
+            MINIDUMP_TYPE type = MINIDUMP_TYPE(
+                MiniDumpNormal | MiniDumpWithDataSegs
+            );
+            MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, type, &mdei, NULL, NULL);
+
+            CloseHandle(hFile);
+        }
+    }
+    
+    RemoveVectoredExceptionHandler(g_handle);
+    return EXCEPTION_CONTINUE_SEARCH;
+}
 
 HINSTANCE hInstance;
 extern "C" BOOL WINAPI DllMain(
@@ -39,6 +88,7 @@ extern "C" BOOL WINAPI DllMain(
             {
                 hook_on_dohook();
                 init_patch();
+                g_handle = AddVectoredExceptionHandler(1, _UnhandledExceptionFilter_);
             }
         }
     }
