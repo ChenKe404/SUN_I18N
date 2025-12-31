@@ -3,14 +3,14 @@
   "defaults": {},
   "configurations": [
     {
-      "type": "dll",
-      "exe": "${projectDir}\\out\\debug\\Game.exe",
-      "args": [
-        "-win"
-      ],
-      "project": "CMakeLists.txt",
-      "projectTarget": "SUN.dll (H:\\github\\SUN_I18N\\out\\debug\\SUN.dll)",
-      "name": "SUN.dll (H:\\github\\SUN_I18N\\out\\debug\\SUN.dll)"
+        "type": "dll",
+        "exe": "${projectDir}\\out\\debug\\Game.exe",
+        "args": [
+            "-win"
+        ],
+        "project": "CMakeLists.txt",
+        "projectTarget": "SUN.dll",
+        "name": "SUN.dll"
     }
   ]
 }

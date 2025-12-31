@@ -88,7 +88,8 @@ extern "C" BOOL WINAPI DllMain(
             {
                 hook_on_dohook();
                 init_patch();
-                g_handle = AddVectoredExceptionHandler(1, _UnhandledExceptionFilter_);
+                if(g_setting.create_dmp_when_crash)
+                    g_handle = AddVectoredExceptionHandler(1, _UnhandledExceptionFilter_);
             }
         }
     }

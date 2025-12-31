@@ -28,6 +28,7 @@ void CMainWnd::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_CHK_UNIT_LINE, _chk_hide_unit_select);
 	DDX_Check(pDX, IDC_CHK_SUBTITLE, _chk_movie_subtitle);
 	DDX_Check(pDX, IDC_CHK_SMALLFONT_CAMEO, _chk_small_font_cameo);
+	DDX_Check(pDX, IDC_CHK_CREATE_DMP_WHEN_CRASH, _chk_create_dmp_when_crash);
 }
 
 std::wstring make_local_desc(LCID lcid)
@@ -236,6 +237,7 @@ void CMainWnd::updateSetting(bool save)
 		sec["HideUnitSelect"] = _chk_hide_unit_select ? "Yes" : "No";
 		sec["MovieSubtitle"] = _chk_movie_subtitle ? "Yes" : "No";
 		sec["SmallFontCameo"] = _chk_small_font_cameo ? "Yes" : "No";
+		sec["CreateDmpWhenCrash"] = _chk_create_dmp_when_crash ? "Yes" : "No";
 		fi.write(ini, true);
 	}
 	else
@@ -247,6 +249,7 @@ void CMainWnd::updateSetting(bool save)
 		_chk_hide_unit_select = equalnc(sec.get("HideUnitSelect").c_str(),"Yes");
 		_chk_movie_subtitle = equalnc(sec.get("MovieSubtitle").c_str(),"Yes");
 		_chk_small_font_cameo = equalnc(sec.get("SmallFontCameo").c_str(),"Yes");
+		_chk_create_dmp_when_crash = equalnc(sec.get("CreateDmpWhenCrash").c_str(),"Yes");
 		if (!loc.empty())
 		{
 			if (equalnc(loc.c_str(), "en-us"))

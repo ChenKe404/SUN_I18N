@@ -33,6 +33,7 @@ protected:
 	BOOL _chk_hide_unit_select;
 	BOOL _chk_movie_subtitle;
 	BOOL _chk_small_font_cameo;
+	BOOL _chk_create_dmp_when_crash;
 	std::map<HWND, std::string> _ctl_text;
 
 // 生成的消息映射函数

@@ -25,6 +25,7 @@ extern struct {
     bool hide_unit_select = true;
     bool show_subtitle = true;
     bool small_font_cameo = false;
+    bool create_dmp_when_crash = false;
     std::string loc;
 } g_setting;
 
