@@ -1,16 +1,26 @@
 {
-  "version": "0.2.1",
-  "defaults": {},
-  "configurations": [
-    {
-        "type": "dll",
-        "exe": "${projectDir}\\out\\debug\\Game.exe",
-        "args": [
-            "-win"
-        ],
-        "project": "CMakeLists.txt",
-        "projectTarget": "SUN.dll",
-        "name": "SUN.dll"
-    }
-  ]
+    "version": "0.2.1",
+    "defaults": {},
+    "configurations": [
+        {
+            "type": "dll",
+            "exe": "${projectDir}\\out\\debug\\Game.exe",
+            "args": [
+                "-win"
+            ],
+            "project": "CMakeLists.txt",
+            "projectTarget": "SUN.dll",
+            "name": "SUN.dll"
+        },
+        {
+            "type": "dll",
+            "exe": "${projectDir}\\out\\debug\\Game.exe",
+            "args": [
+                "-win"
+            ],
+            "project": "CMakeLists.txt",
+            "projectTarget": "SUN.dll (H:\\github\\SUN_I18N\\out\\debug\\SUN.dll)",
+            "name": "SUN.dll (H:\\github\\SUN_I18N\\out\\debug\\SUN.dll)"
+        }
+    ]
 }

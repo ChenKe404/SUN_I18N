@@ -36,6 +36,10 @@ void get_module_dir();
 
 void load_setting();
 
+int multi_to_wide(const char* multi, std::wstring& wide, UINT CP);
+
+int wide_to_multi(const wchar_t* wide, std::string& multi, UINT CP);
+
 int ansi_to_wide(const char* ansi, std::wstring& out);
 
 int wide_to_ansi(const wchar_t* wide, std::string& out);
@@ -69,6 +73,27 @@ inline int u8_to_ansi(const char* u8str, std::string& out) {
     if (u8_to_wide(u8str, wide) < 1)
         return 0;
     return wide_to_ansi(wide.c_str(), out);
+}
+
+// Windows 1252代码页转宽字符集
+inline int w1252_to_wide(const char* w1252, std::wstring& out) {
+    return multi_to_wide(w1252, out, 1252);
+}
+
+// Windows 1252代码页转ANSI
+inline int w1252_to_ansi(const char* w1252, std::string& out) {
+    std::wstring wide;
+    if (w1252_to_wide(w1252, wide) < 1)
+        return 0;
+    return wide_to_ansi(wide.c_str(), out);
+}
+
+// Windows 1252代码页转UTF-8
+inline int w1252_to_u8(const char* w1252, std::string& out) {
+    std::wstring wide;
+    if (w1252_to_wide(w1252, wide) < 1)
+        return 0;
+    return wide_to_u8(wide.c_str(), out);
 }
 
 inline bool equal(const char* a, const char* b) {

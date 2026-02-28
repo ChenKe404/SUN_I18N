@@ -38,13 +38,14 @@ static Point2D __stdcall fancy_text_print_0(int uID, XSurface* pSur, Rect* pRect
 
 static const char* __stdcall modify_mission_save_name(const char* src)
 {
-	static std::string ret;
-	auto u8 = g_text.u8(src);
+	static std::string tmp;
+	w1252_to_u8(src, tmp);
+	auto u8 = g_text.u8(tmp.c_str());
 	if (u8 == src)
 		return src;
-	if (u8_to_ansi(u8, ret) < 1)
+	if (u8_to_ansi(u8, tmp) < 1)
 		return src;
-	return ret.c_str();
+	return tmp.c_str();
 }
 
 static int __stdcall get_window_text(HWND hWnd, LPSTR lpBuffer, int nMaxCount)

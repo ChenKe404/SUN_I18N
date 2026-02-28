@@ -52,7 +52,9 @@ bool RE_RestateMission::Start_Briefing_Screen(ScenarioClass* pSce)
         if (strlen(aText) > 0)
         {
             Rect rect = { the.nX + 110, the.nY + 60, 420, 280 };
-            auto u32str = (char32_t*)g_text.u32(aText);
+            std::string u8str;
+            w1252_to_u8(aText, u8str);
+            auto u32str = (char32_t*)g_text.u32(u8str.c_str());
             prepare_text(u32str);
             g_chrs = fnt.cs(u32str);
             g_pages.clear();

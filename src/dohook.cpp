@@ -8,8 +8,6 @@ static std::map<UINT, std::string> g_mapFetchStr;
 decltype(H_Fetch_String) H_Fetch_String;
 const char* Re_Fetch_String(UINT uID)
 {
-	if (uID == 13)
-		int a = 0;
 	auto iter = g_mapFetchStr.find(uID);
 	if (iter != g_mapFetchStr.end())
 		return iter->second.c_str();

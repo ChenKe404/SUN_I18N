@@ -211,11 +211,13 @@ void CMainWnd::loadLang(const char* loc)
 
 void CMainWnd::trans(HWND hWnd, INIStructure& ini)
 {
+	std::wstring wstr;
 	auto iter = _ctl_text.find(hWnd);
 	if (iter != _ctl_text.end())
 	{
 		const auto& trs = ini[iter->second]["Text"];
-		SetWindowTextA(hWnd, trs.c_str());
+		u8_to_wide(trs.c_str(), wstr);
+		::SetWindowTextW(hWnd, wstr.c_str());
 	}
 }
 

@@ -29,7 +29,7 @@ void unix_line_feed(char* str)
     }
 }
 
-inline int multi2wide(const char* multi, std::wstring& wide, UINT CP)
+int multi_to_wide(const char* multi, std::wstring& wide, UINT CP)
 {
     int sz = MultiByteToWideChar(CP, 0, multi, -1, nullptr, 0);
     if (sz < 1) return 0;
@@ -39,7 +39,7 @@ inline int multi2wide(const char* multi, std::wstring& wide, UINT CP)
     return ret;
 }
 
-inline int wide2multi(const wchar_t* wide, std::string& multi, UINT CP)
+int wide_to_multi(const wchar_t* wide, std::string& multi, UINT CP)
 {
     auto sz = WideCharToMultiByte(CP, 0, wide, -1, nullptr, 0, 0, 0);
     if (sz < 1) return 0;
@@ -51,22 +51,22 @@ inline int wide2multi(const wchar_t* wide, std::string& multi, UINT CP)
 
 int ansi_to_wide(const char* ansi, std::wstring& out)
 {
-    return multi2wide(ansi, out, GetACP());
+    return multi_to_wide(ansi, out, GetACP());
 }
 
 int wide_to_ansi(const wchar_t* wide, std::string& out)
 {
-    return wide2multi(wide, out, GetACP());
+    return wide_to_multi(wide, out, GetACP());
 }
 
 int u8_to_wide(const char* u8str, std::wstring& out)
 {
-    return multi2wide(u8str, out, CP_UTF8);
+    return multi_to_wide(u8str, out, CP_UTF8);
 }
 
 int wide_to_u8(const wchar_t* wide, std::string& out)
 {
-    return wide2multi(wide, out, CP_UTF8);
+    return wide_to_multi(wide, out, CP_UTF8);
 }
 
 int wide_to_u32(const wchar_t* wide, std::u32string& out)
