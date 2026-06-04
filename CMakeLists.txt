@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 
-project(SUN VERSION 1.03 LANGUAGES CXX)
+project(SUN VERSION 1.04 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -30,7 +30,7 @@ file(GLOB_RECURSE SOURCE
 
 add_definitions(-DOUTPUT_MANGLED_NAMES -DNOMINMAX)
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
-add_library(DLL SHARED ${SOURCE} 
+add_library(DLL SHARED ${SOURCE}
     src/res/resource.h
     src/res/res.rc
 )
