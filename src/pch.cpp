@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include <filesystem>
 #include <mini/ini.h>
 namespace fs = std::filesystem;
@@ -6,7 +6,7 @@ using namespace mINI;
 
 void sun() {}
 
-// ±ê×¼»¯×Ö·û´®ÖĞµÄ»»ĞĞ·ûÎªunix±ê×¼
+// æ ‡å‡†åŒ–å­—ç¬¦ä¸²ä¸­çš„æ¢è¡Œç¬¦ä¸ºunixæ ‡å‡†
 void unix_line_feed(char* str)
 {
     const auto len = strlen(str);
@@ -35,7 +35,7 @@ int multi_to_wide(const char* multi, std::wstring& wide, UINT CP)
     if (sz < 1) return 0;
     wide.resize(sz);
     auto ret = MultiByteToWideChar(CP, 0, multi, -1, wide.data(), sz);
-    if (ret > 0) wide.resize(sz - 1);   // Êä³ö²»°üÀ¨nul½áÎ²
+    if (ret > 0) wide.resize(sz - 1);   // è¾“å‡ºä¸åŒ…æ‹¬nulç»“å°¾
     return ret;
 }
 
@@ -45,7 +45,7 @@ int wide_to_multi(const wchar_t* wide, std::string& multi, UINT CP)
     if (sz < 1) return 0;
     multi.resize(sz);
     auto ret = WideCharToMultiByte(CP, 0, wide, -1, multi.data(), sz, 0, 0);
-    if (ret > 0) multi.resize(sz - 1);   // Êä³ö²»°üÀ¨nul½áÎ²
+    if (ret > 0) multi.resize(sz - 1);   // è¾“å‡ºä¸åŒ…æ‹¬nulç»“å°¾
     return ret;
 }
 

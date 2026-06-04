@@ -93,7 +93,7 @@ int __fastcall Re_Draw_Dlg_Text(Surface* pSur, const char* lpText, RECT* pRect, 
 	if (nStyle & 4)
 		y += (h - g_fnt_ui.lineHeight()) / 2;
 
-	g_fnt_ui.setMixColor(ck::rgb(GetRValue(color),GetGValue(color),GetBValue(color)));
+	g_fnt_ui.setMixColor(ck::font::rgb(GetRValue(color),GetGValue(color),GetBValue(color)));
 	g_fnt_ui.draw(chrs, pSur, x, y, w);
 	opts.align = old;
 

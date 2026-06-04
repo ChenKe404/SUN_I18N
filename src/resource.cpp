@@ -2,11 +2,11 @@
 
 MyText g_text;
 
-ck::Font g_ck_fnt10ro;
-ck::Font g_ck_fnt12r;
-ck::Font g_ck_fnt12ro;
-ck::Font g_ck_fnt16r;
-ck::Font g_ck_fnt16ro;
+ck::font::File g_ck_fnt10ro;
+ck::font::File g_ck_fnt12r;
+ck::font::File g_ck_fnt12ro;
+ck::font::File g_ck_fnt16r;
+ck::font::File g_ck_fnt16ro;
 
 MyFont g_fnt_cameo;
 MyFont g_fnt12;
@@ -91,9 +91,9 @@ bool init_resource()
     opts->breakWord = true;
 
     g_fullfnt3gdi = g_fullfnt3;
-    g_fullfnt3gdi.setMixColor(ck::rgb(32, 214, 97));
+    g_fullfnt3gdi.setMixColor(ck::font::rgb(32, 214, 97));
     g_fullfnt3nod = g_fullfnt3;
-    g_fullfnt3nod.setMixColor(ck::rgb(255, 28, 28));
+    g_fullfnt3nod.setMixColor(ck::font::rgb(255, 28, 28));
 
     path = loc_dir + "local.ckt";
     if (!g_text.open(path.c_str()))

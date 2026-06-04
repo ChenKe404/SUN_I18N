@@ -104,11 +104,11 @@ inline bool equalnc(const char* a, const char* b) {
     return _stricmp(a, b) == 0;
 }
 
-inline ck::color to_color(const RGBClass& rgb) {
-    return ck::rgb(rgb.Red, rgb.Green, rgb.Blue);
+inline ck::font::color to_color(const RGBClass& rgb) {
+    return ck::font::rgb(rgb.Red, rgb.Green, rgb.Blue);
 }
 
-inline ck::color to_color(const HSVClass& hsv) {
+inline ck::font::color to_color(const HSVClass& hsv) {
     return to_color((RGBClass)hsv);
 }
 

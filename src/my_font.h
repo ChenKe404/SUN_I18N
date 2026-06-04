@@ -9,12 +9,13 @@ class FontDrawer;
 class MyFont
 {
 public:
-	using Align = ck::FontDrawer::Align;
-	using Char = ck::Font::Char;
-	using CharPtrs = ck::Font::CharPtrList;
-	using Options = ck::FontDrawer::Options;
-	using Line = ck::FontDrawer::Line;
-	using Lines = ck::FontDrawer::Lines;
+	using Color = ck::font::color;
+	using Align = ck::font::Align;
+	using Char = ck::font::Char;
+	using CharPtrs = ck::font::CharPtrArray;
+	using Options = ck::font::Drawer::Options;
+	using Line = ck::font::Drawer::Line;
+	using Lines = ck::font::Drawer::Lines;
 public:
 	MyFont();
 	MyFont(const MyFont&);
@@ -24,9 +25,9 @@ public:
 	MyFont& operator=(const MyFont&);
 	MyFont& operator=(MyFont&&) = delete;
 
-	void attach(ck::Font* fnt);
+	void attach(ck::font::File* fnt);
 
-	ck::Font::Header header() const;
+	ck::font::Header header() const;
 	int lineHeight() const;
 	int maxCharWidth() const;
 	int charWidth(char32_t) const;
@@ -43,8 +44,8 @@ public:
 	inline CharPtrs cs(const std::u32string& u32str) const
 	{ return cs(u32str.c_str()); }
 
-	void setMixColor(ck::color);
-	ck::color mixColor() const;
+	void setMixColor(Color);
+	Color mixColor() const;
 
 	Rect measure(
 		CharPtrs::const_iterator begin,
@@ -94,7 +95,7 @@ public:
 		Rect* out_rect = nullptr
 	);
 private:
-	ck::Font* _fnt;
+	ck::font::File* _fnt;
 	FontDrawer* _drawer;
 	Options _opts;
 };

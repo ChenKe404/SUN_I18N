@@ -3,9 +3,9 @@
 
 #include <map>
 #include <string>
-#include <font.h>
-#include "my_font.h"
+#include <ckfont/file.h>
 #include <cktext/text.h>
+#include "my_font.h"
 
 struct MyText : protected ck::Text
 {

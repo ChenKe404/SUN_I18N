@@ -1,6 +1,6 @@
 #include "my_font.h"
 #include <ddraw.h>
-#include <font.h>
+#include <ckfont/file.h>
 #include <drawer.h>
 #include <blit/dsurface.h>
 #include <tibsun/tibsun_globals.h>
@@ -12,52 +12,58 @@
 /////////////////////////
 /// FontDrawer
 
-static inline uint16_t to_555(ck::color rgb)
+static inline uint16_t to_555(ck::font::color rgb)
 {
-	auto r = ck::cr(rgb) >> 3;
-	auto g = ck::cg(rgb) >> 3;
-	auto b = ck::cb(rgb) >> 3;
+	using namespace ck::font;
+	auto r = cr(rgb) >> 3;
+	auto g = cg(rgb) >> 3;
+	auto b = cb(rgb) >> 3;
 	return (r << 10) | (g << 5) | b;
 }
 
-static inline uint16_t to_565(ck::color rgb)
+static inline uint16_t to_565(ck::font::color rgb)
 {
-	auto r = ck::cr(rgb) >> 3;
-	auto g = ck::cg(rgb) >> 2;
-	auto b = ck::cb(rgb) >> 3;
+	using namespace ck::font;
+	auto r = cr(rgb) >> 3;
+	auto g = cg(rgb) >> 2;
+	auto b = cb(rgb) >> 3;
 	return (r << 11) | (g << 5) | b;
 }
 
-static void writePixel_16_565(uint8_t* mem, ck::color rgb)
+static void writePixel_16_565(uint8_t* mem, ck::font::color rgb)
 {
 	*((uint16_t*)mem) = to_565(rgb);
 }
 
-static void writePixel_16_555(uint8_t* mem, ck::color rgb)
+static void writePixel_16_555(uint8_t* mem, ck::font::color rgb)
 {
 	*((uint16_t*)mem) = to_555(rgb);
 }
 
-static void writePixel_24(uint8_t* mem, ck::color rgb)
+static void writePixel_24(uint8_t* mem, ck::font::color rgb)
 {
-	*mem = ck::cr(rgb);
-	*(mem + 1) = ck::cg(rgb);
-	*(mem + 2) = ck::cb(rgb);
+	using namespace ck::font;
+	*mem = cr(rgb);
+	*(mem + 1) = cg(rgb);
+	*(mem + 2) = cb(rgb);
 }
 
-static void writePixel_32(uint8_t* mem, ck::color rgb)
+static void writePixel_32(uint8_t* mem, ck::font::color rgb)
 {
+	using namespace ck::font;
 	*mem = 0xff;
-	*(mem + 1) = ck::cr(rgb);
-	*(mem + 2) = ck::cg(rgb);
-	*(mem + 3) = ck::cb(rgb);
+	*(mem + 1) = cr(rgb);
+	*(mem + 2) = cg(rgb);
+	*(mem + 3) = cb(rgb);
 }
 
-class FontDrawer : public ck::FontDrawer
+class FontDrawer : public ck::font::Drawer
 {
-	using Super = ck::FontDrawer;
-	using Char = ck::Font::Char;
-	using DataPtr = ck::Font::DataPtr;
+	using Super = ck::font::Drawer;
+	using Char = ck::font::Char;
+	using Box = ck::font::Box;
+	using CharPtrs = ck::font::CharPtrArray;
+	using DataPtr = ck::font::DataPtr;
 public:
 	FontDrawer()
 		: writePixel(nullptr),
@@ -106,8 +112,8 @@ public:
 	}
 
 	Box draw(
-		CharPtrList::const_iterator begin,
-		CharPtrList::const_iterator end,
+		CharPtrs::const_iterator begin,
+		CharPtrs::const_iterator end,
 		int x, int y, int w, int h,
 		const Options& opts
 	) const override
@@ -122,7 +128,7 @@ public:
 	}
 
 	Box draw(
-		const ck::Font::CharPtrList& chrs,
+		const ck::font::CharPtrArray& chrs,
 		int x, int y,
 		const Line& line,
 		int spacingX
@@ -146,7 +152,7 @@ private:
 
 		const auto w = d.w();
 		const auto h = d.h();
-		ck::color rgb;
+		ck::font::color rgb;
 		int ox, oy;
 		for (int cy = 0;cy < d.h();++cy)
 		{
@@ -162,12 +168,12 @@ private:
 				if (rgb == _font->header().transparent)
 					continue;
 				auto mem = (uint8_t*)_mem + (y + cy) * _pitch + (ox) * _bytesPerPixel;	// ÏñËØµØÖ·
-				writePixel(mem, ck::mix(rgb, _mix, true));
+				writePixel(mem, ck::font::mix(rgb, _mix, true));
 			}
 		}
 	}
 private:
-	void (*writePixel)(uint8_t* mem, ck::color rgb);
+	void (*writePixel)(uint8_t* mem, ck::font::color rgb);
 
 	Surface* _sur;
 	void* _mem;
@@ -206,13 +212,13 @@ MyFont& MyFont::operator=(const MyFont& o)
 	return *this;
 }
 
-void MyFont::attach(ck::Font* fnt)
+void MyFont::attach(ck::font::File* fnt)
 {
 	_fnt = fnt;
 	_drawer->setFont(fnt);
 }
 
-ck::Font::Header MyFont::header() const {
+ck::font::Header MyFont::header() const {
 	return _fnt->header();
 }
 
@@ -251,12 +257,12 @@ MyFont::CharPtrs MyFont::cs(const char32_t* u32str) const
 	return _fnt->cs(u32str);
 }
 
-void MyFont::setMixColor(ck::color clr)
+void MyFont::setMixColor(Color clr)
 {
 	_drawer->setMixColor(clr);
 }
 
-ck::color MyFont::mixColor() const
+MyFont::Color MyFont::mixColor() const
 {
 	return _drawer->mixColor();
 }
@@ -282,7 +288,7 @@ bool MyFont::draw(
 )
 {
 	_drawer->setSurface(pSur);
-	ck::FontDrawer::Box box{ 0,0,0,0 };
+	ck::font::Box box{ 0,0,0,0 };
 	box = _drawer->draw(begin, end, x, y, maxWidth, maxHeight, _opts);
 	if (out_rect) *out_rect = { box.x,box.y,box.w,box.h };
 	return false;
